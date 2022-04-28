@@ -9,7 +9,6 @@ import io.micronaut.http.annotation.Status;
 import io.micronaut.scheduling.TaskExecutors;
 import io.micronaut.scheduling.annotation.ExecuteOn;
 import repository.FruitRepository;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;

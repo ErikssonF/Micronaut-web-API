@@ -6,6 +6,7 @@ import configuration.MongoDbConfig;
 import dtos.Fruit;
 import io.micronaut.core.annotation.NonNull;
 import jakarta.inject.Singleton;
+import org.bson.Document;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -27,6 +28,7 @@ public class MongoDbFruitRepository implements FruitRepository {
     @Override
     public void save(@NonNull @NotNull @Valid Fruit fruit) {
         getCollection().insertOne(fruit);
+        new Document("name", "Apple");
     }
 
     @Override
