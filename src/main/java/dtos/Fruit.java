@@ -6,6 +6,11 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import javax.validation.constraints.NotBlank;
 
+import io.micronaut.core.annotation.Creator;
+import io.micronaut.core.annotation.Introspected;
+import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.annotation.Nullable;
+
 @Introspected
 @ReflectiveAccess
 public class Fruit {
@@ -19,7 +24,7 @@ public class Fruit {
     @BsonProperty("description")
     private final String description;
 
-    public Fruit(@NonNull String name)   {
+    public Fruit(@NonNull String name) {
         this(name, null);
     }
 

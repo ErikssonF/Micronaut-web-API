@@ -1,17 +1,16 @@
 package repository;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoCollection;
+import com.mongodb.reactivestreams.client.MongoClient;
+import com.mongodb.reactivestreams.client.MongoCollection;
 import configuration.MongoDbConfig;
 import dtos.Fruit;
 import io.micronaut.core.annotation.NonNull;
 import jakarta.inject.Singleton;
-import org.bson.Document;
+import org.reactivestreams.Publisher;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 
 @Singleton
 public class MongoDbFruitRepository implements FruitRepository {
@@ -26,15 +25,16 @@ public class MongoDbFruitRepository implements FruitRepository {
     }
 
     @Override
-    public void save(@NonNull @NotNull @Valid Fruit fruit) {
-        getCollection().insertOne(fruit);
-        new Document("name", "Apple");
+    public Mono<Boolean> save(@NonNull @NotNull @Valid Fruit fruit) {
+        return Mono.from(getCollection().insertOne(fruit))
+                .map(insertOneResult -> true)
+                .onErrorReturn(false);
     }
 
     @Override
     @NonNull
-    public List<Fruit> list() {
-        return getCollection().find().into(new ArrayList<>());
+    public Publisher<Fruit> list() {
+        return getCollection().find();
     }
 
     @NonNull

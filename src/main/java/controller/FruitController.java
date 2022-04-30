@@ -2,21 +2,21 @@ package controller;
 
 import dtos.Fruit;
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
-import io.micronaut.http.annotation.Status;
-import io.micronaut.scheduling.TaskExecutors;
-import io.micronaut.scheduling.annotation.ExecuteOn;
+import org.reactivestreams.Publisher;
+import reactor.core.publisher.Mono;
 import repository.FruitRepository;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
+import static io.micronaut.http.HttpStatus.CONFLICT;
 import static io.micronaut.http.HttpStatus.CREATED;
 
 @Controller("/fruits")
-@ExecuteOn(TaskExecutors.IO)
 class FruitController {
 
     private final FruitRepository fruitService;
@@ -26,13 +26,13 @@ class FruitController {
     }
 
     @Get
-    List<Fruit> list() {
+    Publisher<Fruit> list() {
         return fruitService.list();
     }
 
     @Post
-    @Status(CREATED)
-    void save(@NonNull @NotNull @Valid Fruit fruit) {
-        fruitService.save(fruit);
+    Mono<HttpStatus> save(@NonNull @NotNull @Valid Fruit fruit) {
+        return fruitService.save(fruit)
+                .map(added -> added ? CREATED : CONFLICT);
     }
 }

@@ -2,15 +2,16 @@ package repository;
 
 import dtos.Fruit;
 import io.micronaut.core.annotation.NonNull;
+import org.reactivestreams.Publisher;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 public interface FruitRepository {
 
     @NonNull
-    List<Fruit> list();
+    Publisher<Fruit> list();
 
-    void save(@NonNull @NotNull @Valid Fruit fruit);
+    Mono<Boolean> save(@NonNull @NotNull @Valid Fruit fruit);
 }
